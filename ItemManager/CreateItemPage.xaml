@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="ItemManagerClient.CreateItemPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Créer un item"
+             BackgroundColor="Transparent">
+
+   <!-- Cadre principal avec bordure -->
+   <Border WidthRequest="500"
+            HeightRequest="700"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            BackgroundColor="White"
+            Stroke="#e0e0e0"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 10"
+            Shadow="Small">
+
+      <Grid RowDefinitions="Auto,*,Auto" 
+              RowSpacing="0">
+
+         <!-- En-tête modal - RECTANGLE avec coins arrondis seulement en haut -->
+         <Border Grid.Row="0" 
+                    BackgroundColor="#2c3e50" 
+                    Padding="20,15"
+                    StrokeShape="RoundRectangle 10,10,0,0">
+            <Grid ColumnDefinitions="*,Auto">
+               <Label Grid.Column="0" 
+                           Text="📝 Créer un nouvel Item" 
+                           TextColor="White" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"/>
+               <Button Grid.Column="1" 
+                            Text="✕" 
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            CornerRadius="20"
+                            Clicked="OnCloseClicked"/>
+            </Grid>
+         </Border>
+
+         <!-- Contenu du formulaire -->
+         <ScrollView Grid.Row="1" Padding="25,20">
+            <VerticalStackLayout Spacing="20">
+
+               <!-- Titre -->
+               <VerticalStackLayout Spacing="8">
+                  <Label Text="Tâche *" 
+                               FontAttributes="Bold" 
+                               TextColor="#2c3e50" 
+                               FontSize="15"/>
+                  <Entry x:Name="TitleEntry" 
+                               Placeholder="Titre de la tâche" 
+                               BackgroundColor="#f8f9fa"
+                               HeightRequest="50"
+                               FontSize="15"
+                               ClearButtonVisibility="WhileEditing"/>
+               </VerticalStackLayout>
+
+               <!-- Description -->
+               <VerticalStackLayout Spacing="8">
+                  <Label Text="Description" 
+                               FontAttributes="Bold" 
+                               TextColor="#2c3e50" 
+                               FontSize="15"/>
+                  <Editor x:Name="DescriptionEditor" 
+                                Placeholder="Décrivez cette tâche..." 
+                                BackgroundColor="#f8f9fa"
+                                HeightRequest="100"
+                                FontSize="15"
+                                AutoSize="TextChanges"/>
+               </VerticalStackLayout>
+
+               <!-- Date et Heure -->
+               <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                  <!-- Date -->
+                  <VerticalStackLayout Grid.Column="0" Spacing="8">
+                     <Label Text="Date *" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2c3e50" 
+                                   FontSize="15"/>
+                     <DatePicker x:Name="DatePicker" 
+                                        BackgroundColor="#f8f9fa"
+                                        HeightRequest="50"/>
+                  </VerticalStackLayout>
+
+                  <!-- Heures -->
+                  <VerticalStackLayout Grid.Column="1" Spacing="8">
+                     <Label Text="Heure *" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2c3e50" 
+                                   FontSize="15"/>
+                     <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="8">
+                        <TimePicker x:Name="StartTimePicker"
+                                            Grid.Column="0"
+                                            BackgroundColor="#f8f9fa"
+                                            HeightRequest="50"/>
+                        <Label Grid.Column="1" 
+                                       Text="à" 
+                                       VerticalOptions="Center" 
+                                       HorizontalOptions="Center"
+                                       FontSize="15"
+                                       TextColor="#2c3e50"/>
+                        <TimePicker x:Name="EndTimePicker"
+                                            Grid.Column="2"
+                                            BackgroundColor="#f8f9fa"
+                                            HeightRequest="50"/>
+                     </Grid>
+                  </VerticalStackLayout>
+               </Grid>
+
+               <!-- Statut et Catégorie -->
+               <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                  <!-- Statut -->
+                  <VerticalStackLayout Grid.Column="0" Spacing="8">
+                     <Label Text="Statut *" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2c3e50" 
+                                   FontSize="15"/>
+                     <Picker x:Name="StatusPicker" 
+                                    Title="Sélectionnez un statut"
+                                    BackgroundColor="#f8f9fa"
+                                    HeightRequest="75"
+                                    FontSize="15">
+                        <Picker.ItemsSource>
+                           <x:Array Type="{x:Type x:String}">
+                              <x:String>📝 Brouillon</x:String>
+                              <x:String>🔓 Ouvert</x:String>
+                              <x:String>⏳ En attente</x:String>
+                              <x:String>❌ Annulé</x:String>
+                              <x:String>✅ Fermé</x:String>
+                           </x:Array>
+                        </Picker.ItemsSource>
+                     </Picker>
+                  </VerticalStackLayout>
+
+                  <!-- Catégorie -->
+                  <VerticalStackLayout Grid.Column="1" Spacing="8">
+                     <Label Text="Catégorie *" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2c3e50" 
+                                   FontSize="15"/>
+                     <Picker x:Name="CategoryPicker" 
+                                    Title="Sélectionnez une catégorie"
+                                    BackgroundColor="#f8f9fa"
+                                    HeightRequest="75"
+                                    FontSize="15">
+                        <Picker.ItemsSource>
+                           <x:Array Type="{x:Type x:String}">
+                              <x:String>📅 Réunion</x:String>
+                              <x:String>📊 Projet</x:String>
+                              <x:String>🔧 Maintenance</x:String>
+                              <x:String>🎓 Formation</x:String>
+                              <x:String>📋 Reporting</x:String>
+                              <x:String>❓ Autre</x:String>
+                           </x:Array>
+                        </Picker.ItemsSource>
+                     </Picker>
+                  </VerticalStackLayout>
+               </Grid>
+
+            </VerticalStackLayout>
+         </ScrollView>
+
+         <!-- Pied de page - RECTANGLE avec coins arrondis seulement en bas -->
+         <Border Grid.Row="2" 
+                    BackgroundColor="White" 
+                    Padding="20,15"
+                    StrokeShape="RoundRectangle 0,0,10,10">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+               <Button x:Name="CancelButton" 
+                            Text="Annuler" 
+                            BackgroundColor="#95a5a6"
+                            TextColor="White"
+                            Grid.Column="0"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            FontSize="16"
+                            Clicked="OnCancelButtonClicked"/>
+               <Button x:Name="SaveButton" 
+                            Text="Enregistrer" 
+                            BackgroundColor="#3498db"
+                            TextColor="White"
+                            Grid.Column="1"
+                            CornerRadius="8"
+                            HeightRequest="50"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Clicked="OnSaveClicked"/>
+            </Grid>
+         </Border>
+
+      </Grid>
+   </Border>
+
+</ContentPage>

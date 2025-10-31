@@ -1,0 +1,83 @@
+﻿<div>
+    <!-- Cartes de statistiques -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 25px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 10px;">📋</div>
+            <h3 style="margin: 0 0 10px 0;">Items Totaux</h3>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; padding: 25px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 10px;">🔓</div>
+            <h3 style="margin: 0 0 10px 0;">Items Ouverts</h3>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 25px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 10px;">⏳</div>
+            <h3 style="margin: 0 0 10px 0;">En Attente</h3>
+            <p style="font-size: 2rem; font-weight: bold; margin: 0;">0</p>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+        <h3 style="margin-top: 0;">🚀 Actions Rapides</h3>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <button class="btn btn-primary" @onclick="() => NavigateTo('create')">
+                ➕ Créer un Item
+            </button>
+            <button class="btn btn-outline" @onclick="() => NavigateTo('items')">
+                📋 Voir tous les Items
+            </button>
+            <button class="btn btn-outline" @onclick="() => NavigateTo('categories')">
+                🏷️ Gérer les Catégories
+            </button>
+        </div>
+    </div>
+
+    <!-- Progression du projet -->
+    <div style="background: white; padding: 25px; border-radius: 10px; border-left: 4px solid #3498db;">
+        <h3 style="margin-top: 0;">🎯 Progression du Développement</h3>
+        <div style="display: grid; gap: 15px;">
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>✅ Formulaire de création d'items</span>
+                    <span style="color: #27ae60; font-weight: bold;">Terminé</span>
+                </div>
+                <div style="background: #ecf0f1; height: 6px; border-radius: 3px;">
+                    <div style="background: #27ae60; height: 100%; width: 100%; border-radius: 3px;"></div>
+                </div>
+            </div>
+            
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>🔄 Tableau de suivi des items</span>
+                    <span style="color: #f39c12; font-weight: bold;">En cours</span>
+                </div>
+                <div style="background: #ecf0f1; height: 6px; border-radius: 3px;">
+                    <div style="background: #f39c12; height: 100%; width: 60%; border-radius: 3px;"></div>
+                </div>
+            </div>
+            
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>⏳ Vue calendrier</span>
+                    <span style="color: #95a5a6; font-weight: bold;">À venir</span>
+                </div>
+                <div style="background: #ecf0f1; height: 6px; border-radius: 3px;">
+                    <div style="background: #95a5a6; height: 100%; width: 20%; border-radius: 3px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Méthodes de navigation simples
+    private void NavigateTo(string page)
+    {
+        // Cette méthode sera appelée quand nous connecterons la navigation
+        Console.WriteLine($"Navigation vers: {page}");
+    }
+}
