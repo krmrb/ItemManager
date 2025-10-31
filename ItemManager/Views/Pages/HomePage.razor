@@ -1,0 +1,57 @@
+﻿@using ItemManagerClient.Enums
+@inject ItemManagerClient.Services.IItemService ItemService
+@inject ItemManagerClient.Services.ICategoryService CategoryService
+
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-12">
+         <h1 class="display-4">Welcome to ItemManager</h1>
+         <p class="lead">Manage your items efficiently with our simple tracking system.</p>
+      </div>
+   </div>
+
+   <div class="row mt-4">
+      <div class="col-md-3">
+         <div class="card text-white bg-primary">
+            <div class="card-body">
+               <h5 class="card-title">Total Items</h5>
+               <h2 class="card-text">@totalItemsCount</h2>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-3">
+         <div class="card text-white bg-success">
+            <div class="card-body">
+               <h5 class="card-title">Open Items</h5>
+               <h2 class="card-text">@openItemsCount</h2>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row mt-4">
+      <div class="col-12">
+         <button class="btn btn-primary me-2" @onclick="NavigateToCreate">
+            Create New Item
+         </button>
+         <button class="btn btn-outline-secondary" @onclick="() => NavigateTo('items')">
+            View All Items
+         </button>
+      </div>
+   </div>
+</div>
+
+@code {
+   [CascadingParameter] protected Action<string> NavigateTo { get; set; }
+   [CascadingParameter] protected Action NavigateToCreate { get; set; }
+
+   private int totalItemsCount = 0;
+   private int openItemsCount = 0;
+
+   protected override async Task OnInitializedAsync()
+   {
+      var items = await ItemService.GetItemsAsync();
+      totalItemsCount = items.Count;
+      openItemsCount = items.Count(i => i.Status == ItemStatus.Open);
+   }
+}

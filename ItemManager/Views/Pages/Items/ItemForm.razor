@@ -1,0 +1,271 @@
+﻿@page "/items/create"
+@page "/items/edit/{Id:int}"
+@using ItemManagerClient.Models
+@using ItemManagerClient.Enums
+@using ItemManagerClient.Services
+@inject IItemService ItemService
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<PageTitle>@PageTitleText - ItemManager</PageTitle>
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">@PageTitleText</h1>
+            <div class="progress mb-2" style="height: 4px;">
+                <div class="progress-bar" role="progressbar" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <EditForm Model="CurrentItem" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Basic Information Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Basic Information</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Title Field -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Item</label>
+                            <InputText id="title" @bind="CurrentItem.Title" class="form-control" 
+                                      placeholder="Item title" />
+                            <ValidationMessage For="@(() => CurrentItem.Title)" />
+                            <div class="form-text">Required, maximum 80 characters</div>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <InputTextArea id="description" @bind="CurrentItem.Description" 
+                                         class="form-control" rows="4"
+                                         placeholder="Describe objectives, participants, required resources..." />
+                            <ValidationMessage For="@(() => CurrentItem.Description)" />
+                        </div>
+
+                        <!-- Date Field -->
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <InputDate id="date" @bind="CurrentItem.Date" TValue="DateTime" class="form-control" />
+                            <ValidationMessage For="@(() => CurrentItem.Date)" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Item Time</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- All Day Checkbox -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <InputCheckbox id="allDay" @bind="CurrentItem.IsAllDay" 
+                                             class="form-check-input" />
+                                <label class="form-check-label" for="allDay">
+                                    All day
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Time Fields (hidden if all day) -->
+                        @if (!CurrentItem.IsAllDay)
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="startTime" class="form-label">From</label>
+                                        <InputTime id="startTime" @bind="CurrentItem.StartTime" 
+                                                  class="form-control" />
+                                        <ValidationMessage For="@(() => CurrentItem.StartTime)" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="endTime" class="form-label">To</label>
+                                        <InputTime id="endTime" @bind="CurrentItem.EndTime" 
+                                                  class="form-control" />
+                                        <ValidationMessage For="@(() => CurrentItem.EndTime)" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Time validation message -->
+                            @if (ShowTimeValidationError)
+                            {
+                                <div class="alert alert-warning" role="alert">
+                                    End time must be after start time.
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status and Category Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Classification</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Status Field -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <InputSelect id="status" @bind="CurrentItem.Status" TValue="ItemStatus" 
+                                               class="form-select">
+                                        <option value="@ItemStatus.Draft">📝 Draft</option>
+                                        <option value="@ItemStatus.Open">🔓 Open</option>
+                                        <option value="@ItemStatus.Pending">⏳ Pending</option>
+                                        <option value="@ItemStatus.Canceled">❌ Canceled</option>
+                                        <option value="@ItemStatus.Closed">✅ Closed</option>
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => CurrentItem.Status)" />
+                                </div>
+                            </div>
+
+                            <!-- Category Field -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category</label>
+                                    @if (categories != null)
+                                    {
+                                        <InputSelect id="category" @bind="CurrentItem.CategoryId" TValue="int" 
+                                                   class="form-select">
+                                            <option value="0">-- Select Category --</option>
+                                            @foreach (var category in categories)
+                                            {
+                                                <option value="@category.Id">@category.Icon @category.Name</option>
+                                            }
+                                        </InputSelect>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-muted">Loading categories...</div>
+                                    }
+                                    <ValidationMessage For="@(() => CurrentItem.CategoryId)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Item CurrentItem { get; set; } = new Item();
+    private List<Category>? categories;
+    private bool ShowTimeValidationError = false;
+
+    private string PageTitleText => Id == 0 ? "Create Item" : "Edit Item";
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetCategoriesAsync();
+
+        if (Id > 0)
+        {
+            // Edit mode - load existing item
+            var existingItem = await ItemService.GetItemAsync(Id);
+            if (existingItem != null)
+            {
+                CurrentItem = existingItem;
+            }
+            else
+            {
+                Navigation.NavigateTo("/items");
+            }
+        }
+        else
+        {
+            // Create mode - initialize with default values
+            CurrentItem = new Item
+            {
+                Date = DateTime.Today,
+                Status = ItemStatus.Draft
+            };
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Validate time if not all day
+        if (!CurrentItem.IsAllDay && CurrentItem.StartTime.HasValue && CurrentItem.EndTime.HasValue)
+        {
+            if (CurrentItem.EndTime <= CurrentItem.StartTime)
+            {
+                ShowTimeValidationError = true;
+                return;
+            }
+        }
+
+        ShowTimeValidationError = false;
+
+        try
+        {
+            if (Id == 0)
+            {
+                // Create new item
+                await ItemService.CreateItemAsync(CurrentItem);
+            }
+            else
+            {
+                // Update existing item
+                await ItemService.UpdateItemAsync(CurrentItem);
+            }
+
+            // Redirect to items list
+            Navigation.NavigateTo("/items");
+        }
+        catch (Exception ex)
+        {
+            // In a real app, you would show a proper error message
+            Console.WriteLine($"Error saving item: {ex.Message}");
+        }
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/items");
+    }
+}

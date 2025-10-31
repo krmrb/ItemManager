@@ -1,0 +1,18 @@
+﻿<h1 style="color: red; padding: 20px;">✅ Application ItemManager Chargée !</h1>
+<h2>Test des composants :</h2>
+
+<button @onclick="ShowMessage">Cliquez-moi</button>
+
+@if (showMessage)
+{
+   <p style="color: green; font-weight: bold;">🎉 Blazor fonctionne !</p>
+}
+
+@code {
+   private bool showMessage = false;
+
+   private void ShowMessage()
+   {
+      showMessage = true;
+   }
+}
