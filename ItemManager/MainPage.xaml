@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="ItemManagerClient.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="ItemManager">
+
+   <Grid ColumnDefinitions="250,*">
+
+      <!-- MENU VERTICAL GAUCHE -->
+      <ScrollView Grid.Column="0" BackgroundColor="#2c3e50">
+         <VerticalStackLayout Spacing="0">
+
+            <!-- Logo -->
+            <Frame BackgroundColor="#1a252f" Padding="20" HasShadow="False">
+               <Label Text="📋 ItemManager" 
+                           TextColor="White" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"/>
+            </Frame>
+
+            <!-- Items -->
+            <Border Stroke="Transparent" BackgroundColor="#34495e">
+               <Grid Padding="15" x:Name="ItemsMenu">
+                  <Label Text="📋 Items" 
+                               TextColor="#3498db" 
+                               FontSize="16"
+                               VerticalOptions="Center"/>
+                  <BoxView x:Name="ItemsIndicator" 
+                                 BackgroundColor="#3498db" 
+                                 WidthRequest="4" 
+                                 HorizontalOptions="Start"
+                                 VerticalOptions="Fill"
+                                 IsVisible="True"/>
+               </Grid>
+            </Border>
+
+            <!-- Catégories -->
+            <Border Stroke="Transparent">
+               <Grid Padding="15" x:Name="CategoriesMenu">
+                  <Label Text="🏷️ Catégories" 
+                               TextColor="#bdc3c7" 
+                               FontSize="16"
+                               VerticalOptions="Center"/>
+                  <BoxView x:Name="CategoriesIndicator" 
+                                 BackgroundColor="#3498db" 
+                                 WidthRequest="4" 
+                                 HorizontalOptions="Start"
+                                 VerticalOptions="Fill"
+                                 IsVisible="False"/>
+               </Grid>
+            </Border>
+
+         </VerticalStackLayout>
+      </ScrollView>
+
+      <!-- CONTENU PRINCIPAL DROITE -->
+      <ScrollView Grid.Column="1" BackgroundColor="#f8f9fa">
+         <VerticalStackLayout Spacing="0">
+
+            <!-- En-tête du contenu -->
+            <Frame BackgroundColor="White" Padding="25,20" HasShadow="False">
+               <VerticalStackLayout Spacing="5">
+                  <Label x:Name="ContentTitle" 
+                               Text="Tableau de suivi des items" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="#2c3e50"/>
+                  <Label x:Name="ContentDescription" 
+                               Text="Suivez l'état d'avancement de vos items" 
+                               FontSize="14"
+                               TextColor="#7f8c8d"/>
+               </VerticalStackLayout>
+            </Frame>
+
+            <!-- Barre d'outils -->
+            <Frame BackgroundColor="White" Padding="15" HasShadow="False">
+               <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+
+                  <!-- Recherche -->
+                  <Frame Grid.Column="0" 
+                               BackgroundColor="#f8f9fa" 
+                               Padding="10" 
+                               HasShadow="False"
+                               CornerRadius="10">
+                     <Grid ColumnDefinitions="Auto,*">
+                        <Label Grid.Column="0" 
+                                       Text="🔍" 
+                                       VerticalOptions="Center"
+                                       Margin="5,0"/>
+                        <Entry Grid.Column="1" 
+                                       Placeholder="Rechercher une tâche..." 
+                                       BackgroundColor="Transparent"/>
+                     </Grid>
+                  </Frame>
+
+                  <!-- Boutons d'action -->
+                  <Button Grid.Column="1" 
+                                Text="📊 Vues" 
+                                BackgroundColor="Transparent"
+                                TextColor="#3498db"
+                                BorderColor="#3498db"
+                                BorderWidth="1"
+                                CornerRadius="5"/>
+
+                  <Button Grid.Column="2" 
+                              Text="➕ Nouveau" 
+                              BackgroundColor="#3498db"
+                              TextColor="White"
+                              CornerRadius="5"
+                              Clicked="OnCreateNewItemClicked"/>
+               </Grid>
+            </Frame>
+
+            <!-- Tableau de suivi -->
+            <Frame x:Name="ContentFrame" BackgroundColor="White" Padding="0" HasShadow="False">
+               <VerticalStackLayout Padding="15" Spacing="15">
+
+                  <!-- Message vide par défaut -->
+                  <Frame BackgroundColor="#fff3cd" Padding="20" HasShadow="False">
+                     <HorizontalStackLayout Spacing="10">
+                        <Label Text="ℹ️" FontSize="16"/>
+                        <Label Text="Aucun item trouvé. Créez votre premier item pour commencer." 
+                                       TextColor="#856404"
+                                       VerticalOptions="Center"/>
+                     </HorizontalStackLayout>
+                  </Frame>
+
+               </VerticalStackLayout>
+            </Frame>
+
+         </VerticalStackLayout>
+      </ScrollView>
+
+   </Grid>
+
+</ContentPage>
